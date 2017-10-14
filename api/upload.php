@@ -1,0 +1,17 @@
+<?php
+$status = basename( $_FILES['csv_file']['name']);
+// $result = "<script language='javascript' type='text/javascript'>window.top.window.stopUpload();</script>";   
+
+// echo $result;
+// return 
+// $destination_path = getcwd().DIRECTORY_SEPARATOR;
+// $result = 0;
+
+// $target_path = $destination_path . basename( $_FILES['myfile']['name']);
+
+// if(@move_uploaded_file($_FILES['myfile']['tmp_name'], $target_path)) {
+// 	$result = 1;
+// }
+
+// sleep(1);
+?>
