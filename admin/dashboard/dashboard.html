@@ -33,6 +33,9 @@
     <link href="css/style-responsive.css" rel="stylesheet" />
 	<link href="css/xcharts.min.css" rel=" stylesheet">	
 	<link href="css/jquery-ui-1.10.4.min.css" rel="stylesheet">
+	
+	<script src="js/menuclickaction.js"></script>
+	<link rel="stylesheet" href="css/main.css" />
     <!-- =======================================================
         Theme Name: NiceAdmin
         Theme URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
@@ -43,9 +46,7 @@
 
   <body>
   <!-- container section start -->
-  <section id="container" class="">
-     
-      
+  <section id="" class="">
       <header class="header dark-bg">
             <div class="toggle-nav">
                 <div class="icon-reorder tooltips" data-original-title="Toggle Navigation" data-placement="bottom"><i class="icon_menu"></i></div>
@@ -85,49 +86,50 @@
               <!-- sidebar menu start-->
               <ul class="sidebar-menu">                
                   <li class="active">
-                      <a class="" href="dashboard.html">
+                <!--      <a class="" href="dashboard.html"> -->
+                      <a  onClick="openProductForm()">
                           <i class="icon_house_alt"></i>
                           <span>Dashboard</span>
                       </a>
                   </li>
 				  <li>
-                      <a href="dashboard.html" class="">
+                      <a  onClick="openProductForm()">
                           <i class="icon_document_alt"></i>
                           <span>Products</span>
                       </a>
                   </li> 
                   <li>
-                      <a href="dashboard.html" class="">
+                      <a  onClick="openVenderForm()">
                           <i class="icon_document_alt"></i>
                           <span>Venders</span>
                       </a>
                   </li>       
                   <li>
-                      <a href="dashboard.html" class="">
+                      <a  onClick="openCustomerForm()">
                           <i class="icon_document_alt"></i>
                           <span>Customers List</span>
                       </a>
                   </li>       
                   <li>
-                      <a href="dashboard.html" class="">
+                      <a  onClick="openPromotionsForm()">
                           <i class="icon_document_alt"></i>
                           <span>Promotions</span>
                       </a>
                   </li> 
                   <li>
-                      <a href="dashboard.html" class="">
+                      <a  onClick="openLogisticsForm()">
                           <i class="icon_document_alt"></i>
                           <span>Logistics</span>
                       </a>
                   </li>       
                   <li>
-                      <a href="dashboard.html" class="">
+                      <a  onClick="openDiscountsForm()">
                           <i class="icon_document_alt"></i>
                           <span>Discounts</span>
                       </a>
                   </li>       
                   <li>
-                      <a href="dashboard.html" class="">
+                      <a  onClick="openViewOrderForm()">
                           <i class="icon_document_alt"></i>
                           <span>View Orders</span>
                       </a>
@@ -141,23 +143,22 @@
                           <span class="menu-arrow arrow_carrot-right"></span>
                       </a>
                       <ul class="sub">
-                          <li><a class="" href="dashboard.html">Bottle per Case</a></li>
-                          <li><a class="" href="dashboard.html">City</a></li>
-                          <li><a class="" href="dashboard.html">Country</a></li>
-                          <li><a class="" href="dashboard.html">Contact Us</a></li>
-                          <li><a class="" href="dashboard.html">Critics</a></li>
-                          <li><a class="" href="dashboard.html">Critics Score</a></li>
-                          <li><a class="" href="dashboard.html">Currency</a></li>
-                          <li><a class="" href="dashboard.html">Geography</a></li>
-                          <li><a class="" href="dashboard.html">Item Size</a></li>
-                          <li><a class="" href="dashboard.html">Legal Information</a></li>
-                          <li><a class="" href="dashboard.html">Marketing Text</a></li>
-                          <li><a class="" href="dashboard.html">Status</a></li>
-                          <li><a class="" href="dashboard.html">Geography</a></li>
-                          <li><a class="" href="dashboard.html">Tax</a></li>
-                          <li><a class="" href="dashboard.html">Varietal</a></li>
-                          <li><a class="" href="dashboard.html">Vintage</a></li>
-                          <li><a class="" href="dashboard.html">Wine Type</a></li>
+                          <li><a onClick="openMoreBottlePerCaseForm()">Bottle per Case</a></li>
+                          <li><a onClick="openCityForm()">City</a></li>
+                          <li><a onClick="openCountryForm()">Country</a></li>
+                          <li><a onClick="openContactUsForm()">Contact Us</a></li>
+                          <li><a onClick="openCriticsForm()">Critics</a></li>
+                          <li><a onClick="openCriticsScoreForm()">Critics Score</a></li>
+                          <li><a onClick="openCurrencyForm()">Currency</a></li>
+                          <li><a  onClick="openGeographyForm()">Geography</a></li>
+                          <li><a  onClick="openItemSizeForm()">Item Size</a></li>
+                          <li><a  onClick="openLegalInformationsForm()">Legal Information</a></li>
+                          <li><a  onClick="openMarketingTextForm()">Marketing Text</a></li>
+                          <li><a  onClick="openStatusForm()">Status</a></li>
+                          <li><a  onClick="openTaxForm()">Tax</a></li>
+                          <li><a  onClick="openVarietalForm()">Varietal</a></li>
+                          <li><a  onClick="openVintageForm()">Vintage</a></li>
+                          <li><a  onClick="openWineTypeForm()">Wine Type</a></li>
                           
                       </ul>
                   </li>
@@ -168,13 +169,13 @@
                           <span class="menu-arrow arrow_carrot-right"></span>
                       </a>
                       <ul class="sub">
-                          <li><a class="" href="dashboard.html">Product</a></li>
-                          <li><a class="" href="dashboard.html">Customer</a></li>
-                          <li><a class="" href="dashboard.html">Date</a></li>
-                          <li><a class="" href="dashboard.html">Promotion</a></li>
-                          <li><a class="" href="dashboard.html">Discount</a></li>
-                          <li><a class="" href="dashboard.html">Vendor</a></li>
-                          <li><a class="" href="dashboard.html">Logistics</a></li>
+                          <li><a  onClick="openProductReportForm()">Product</a></li>
+                          <li><a  onClick="openCustomerReportForm()">Customer</a></li>
+                          <li><a  onClick="openDateReportForm()">Date</a></li>
+                          <li><a  onClick="openPromotionReportForm()">Promotion</a></li>
+                          <li><a  onClick="openDiscountReportForm()">Discount</a></li>
+                          <li><a  onClick="openVenderReportForm()">Vendor</a></li>
+                          <li><a  onClick="openLogisticsReportForm()">Logistics</a></li>
                           
                       </ul>
                   </li>
@@ -198,9 +199,11 @@
 					</ol>
 				</div>
 			</div>
-          		  
- 			<br><br>
-		
+			 <br>
+			
+			<div id="menuaction">
+			
+			</div>		
 		
           </section>
       </section>
