@@ -61,6 +61,7 @@ form{
 </style>
 <script src="../../../js/jquery-1.8.3.min.js"></script>
 <script>
+
  function deleteRecord(recId) {
 	 var r = confirm("Are you sure you want to delete the record?");
 	 if (r == true) {
@@ -132,33 +133,25 @@ form{
      return true;
  }
 
- function startUpload(){
-	    document.getElementById('f1_upload_process').style.visibility = 'visible';
-	    return true;
-	}
 
- function stopUpload(result){
-	 alert(result);
-	 return;
-     var result = '';
-     if (success == 1){
-        document.getElementById('result').innerHTML =
-          '<span class="msg">The file was uploaded successfully!<\/span><br/><br/>';
-     }
-     else {
-        document.getElementById('result').innerHTML = 
-          '<span class="emsg">There was an error during file upload!<\/span><br/><br/>';
-     }
-     document.getElementById('f1_upload_process').style.visibility = 'hidden';
-     return true;   
-}
-
- function uploadCSV() {
-	 alert("Start upload");
+ function uploadResponse(responseStatus) {
+     alert(responseStatus);
  }
+
+     function submitForm() {
+         console.log("submit event");
+         var formData = new FormData(document.getElementById("fileinfo"));
+         formData.append("pagename", "bottlepercase");
+          upload(uploadResponse,formData);
+          return false;
+     }        
+
 
  
 </script>
+<head>
+    <script src="../../../js/commonmethods.js"></script>
+</head>
  
 <body>
 	<table id="main">
@@ -184,23 +177,13 @@ form{
 					<th style="height: 30px;">Or</th>
 					</tr>
 					<tr style="margin-left: 10px;">
-						<td width="100%" style="padding: 10px 10px 10px 10px;">													
-							<form action="../../../../../api/upload.php" method="post" enctype="multipart/form-data" target="upload_target" >
-														Upload CSV File <br/>
- 								<input type="file" id="csv_file_input" name="csv_file" accept=".csv" onchange="validateInput(this);"/> <br/>
-
-          						<input id="btn_upload" type="submit" name="submitBtn" value="Upload" />
-							</form>
-							<iframe id="upload_target" name="upload_target" src="#" style="width:0;height:0;border:0px solid #fff;">                 
-								<script type="text/javascript">
-								alert("hi");
-  								 window.top.window.stopUpload(<?php echo $result; ?>);
-								</script>
-							</iframe>
-							<br/>
-						<p id="f1_upload_process">Loading...<br/><img src="../../../img/loader.gif" /></p>
-						<p id="result"></p>
-							
+						<td width="100%" style="padding: 10px 10px 10px 10px;">											
+							Upload CSV File <br/>
+							<form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
+        						 <input type="file" name="file" required />
+       							 <input type="submit" value="Upload" />
+   							</form>
+							<br/>							
 						</td>
 					</tr>
 				</table>
