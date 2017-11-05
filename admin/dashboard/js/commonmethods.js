@@ -12,7 +12,30 @@ upload = function(callback, formData) {
 		callback(data);
 	});
 }
-
-function foo(salutation) {
-    alert(salutation + " " + this.name + " test callback");
+    
+function validateInput(oInput) {
+	var _validFileExtensions = [".csv"];
+	if (oInput.type == "file") {
+        var sFileName = oInput.value;
+         if (sFileName.length > 0) {
+            var blnValid = false;
+            for (var j = 0; j < _validFileExtensions.length; j++) {
+                var sCurExtension = _validFileExtensions[j];
+                if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                    blnValid = true;
+                    break;
+                }
+            }
+             
+            if (!blnValid) {
+                //"Sorry, " + sFileName + " is invalid, allowed extensions is: " + _validFileExtensions.join(", ")
+            	alert("File with extension \".csv\" is only allowed to upload!");
+                oInput.value = "";
+                return false;
+            }
+            return true;
+        }
+    }
+	oInput.value = "";
+    return false;
 }

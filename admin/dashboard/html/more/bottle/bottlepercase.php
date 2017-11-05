@@ -1,8 +1,8 @@
-<?php 
-include_once '../../../../../api/admin_api.php';
+<?php
+include_once '../../../../../api/more/bottlepercase/bottlepercase_server.php';
 
-$obj = new AdminApi();
-$bottlesListStr = $obj->getBottlesPerCaseList();
+$objBottPerCase = new BottlePerCase();
+$bottlesListStr = $objBottPerCase->getBottlesPerCaseList();
 ?>
 </html>
 <style>
@@ -57,16 +57,16 @@ form{
  
 }
 
-
 </style>
 <script src="../../../js/jquery-1.8.3.min.js"></script>
+<script src="../../../js/commonmethods.js"></script>
 <script>
 
  function deleteRecord(recId) {
 	 var r = confirm("Are you sure you want to delete the record?");
 	 if (r == true) {
 		 var request = $.ajax({
-		   url: "../../../../../api/admin_api.php?f=deleteBottlesPerCaseMasterRecord",
+		   url: "../../../../../api/admin_api.php??function=bottlepercase&action=deleteBottlesPerCaseMasterRecord",
 		   type: "POST",
 		   data: {id : recId},
 		   dataType: "html"
@@ -89,7 +89,7 @@ form{
 	 if (!isNaN(bottlesPerCase) && bottlesPerCase > 0) {
 		$('#text_input_new_entry').val(""); 
 	 	var request = $.ajax({
-		   url: "../../../../../api/admin_api.php?f=addBottlesPerCaseMasterRecord",
+		   url: "../../../../../api/admin_api.php?function=bottlepercase&action=addBottlesPerCaseMasterRecord",
 		   type: "POST",
 		   data: {id : bottlesPerCase},
 		   dataType: "html"
@@ -109,49 +109,19 @@ form{
 	 }
  }
 
- var _validFileExtensions = [".csv"];    
- function validateInput(oInput) {
-     if (oInput.type == "file") {
-         var sFileName = oInput.value;
-          if (sFileName.length > 0) {
-             var blnValid = false;
-             for (var j = 0; j < _validFileExtensions.length; j++) {
-                 var sCurExtension = _validFileExtensions[j];
-                 if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
-                     blnValid = true;
-                     break;
-                 }
-             }
-              
-             if (!blnValid) {
-                 alert("Sorry, " + sFileName + " is invalid, allowed extensions is: " + _validFileExtensions.join(", "));
-                 oInput.value = "";
-                 return false;
-             }
-         }
-     }
-     return true;
- }
-
-
  function uploadResponse(responseStatus) {
      alert(responseStatus);
  }
 
-     function submitForm() {
-         console.log("submit event");
-         var formData = new FormData(document.getElementById("fileinfo"));
-         formData.append("pagename", "bottlepercase");
-          upload(uploadResponse,formData);
-          return false;
-     }        
-
-
- 
+ function submitForm() {
+	 if (validateInput(document.getElementById("fileToUpload")) == true) {
+	     var formData = new FormData(document.getElementById("fileinfo"));
+	     formData.append("pagename", "bottlepercase");
+	     upload(uploadResponse,formData);
+	     return false;
+	 }
+}
 </script>
-<head>
-    <script src="../../../js/commonmethods.js"></script>
-</head>
  
 <body>
 	<table id="main">
@@ -180,7 +150,7 @@ form{
 						<td width="100%" style="padding: 10px 10px 10px 10px;">											
 							Upload CSV File <br/>
 							<form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
-        						 <input type="file" name="file" required />
+        						 <input type="file" name="file" id="fileToUpload" required onChange="validateInput(this)" />
        							 <input type="submit" value="Upload" />
    							</form>
 							<br/>							
