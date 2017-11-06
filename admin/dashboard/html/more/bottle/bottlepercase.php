@@ -66,7 +66,7 @@ form{
 	 var r = confirm("Are you sure you want to delete the record?");
 	 if (r == true) {
 		 var request = $.ajax({
-		   url: "../../../../../api/admin_api.php??function=bottlepercase&action=deleteBottlesPerCaseMasterRecord",
+		   url: "../../../../../api/admin_api.php?function=bottlepercase&action=deleteBottlesPerCaseMasterRecord",
 		   type: "POST",
 		   data: {id : recId},
 		   dataType: "html"
@@ -110,14 +110,17 @@ form{
  }
 
  function uploadResponse(responseStatus) {
-     alert(responseStatus);
+	 if (responseStatus.length > 0) {
+		$("#bottles-per-case-list").html(responseStatus);
+		$("#fileToUpload").val('');
+	 }
  }
 
  function submitForm() {
 	 if (validateInput(document.getElementById("fileToUpload")) == true) {
 	     var formData = new FormData(document.getElementById("fileinfo"));
 	     formData.append("pagename", "bottlepercase");
-	     upload(uploadResponse,formData);
+	     upload(uploadResponse, formData);
 	     return false;
 	 }
 }
