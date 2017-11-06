@@ -1,5 +1,7 @@
 <?php
-require_once __DIR__."/../../dbbase.php";
+
+require_once __DIR__ . '/../../uploadbase.php';
+require_once __DIR__ . '/../../dbbase.php';
 
 class BottlePerCase extends DbBase {
 	function __construct() {
@@ -10,11 +12,18 @@ class BottlePerCase extends DbBase {
 		if (isset($action) && strlen($action) > 0) {
 			switch ($action) {
 				case "deleteBottlesPerCaseMasterRecord":
-					$response = $this->deleteBottlePerCaseMasterRecord($params);
+					$response = $this->deleteBottlePerCaseMasterRecord($params['id']);
 					echo $response;
 					break;
 				case "addBottlesPerCaseMasterRecord":
-					$response = $this->addBottlesPerCase($params);
+					if ($this->addBottlesPerCase($params['id'])) {
+						echo $this->getBottlesPerCaseList();
+						return;
+					}
+					echo "";
+					break;
+				case "uploadDataFromCSVFile":	
+					$response = $this->loadDataFromCSVFile($params);
 					echo $response;
 					break;
 				default:
@@ -23,28 +32,66 @@ class BottlePerCase extends DbBase {
 		}
 	}
 	
-	private function addBottlesPerCase($postParams) {
-		$bottlesPerCase = $postParams['id'];
+	private function isRecordExists($id) {
+		$sql_query = "SELECT * FROM bottle_per_case_master WHERE botpercase = $id";
+		$result = $this->mysqli->query($sql_query);
+		
+		$arrBottlesPerCase = array();
+		if (mysqli_num_rows($result) > 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	private function addBottlesPerCase($bottlesPerCase) {
 		if ($bottlesPerCase > 0) {
-			$sql_query = "INSERT INTO bottle_per_case_master (botpercase) VALUES ($bottlesPerCase)";
-			
-			if ($this->mysqli->query($sql_query)) {
-				return $this->getBottlesPerCaseList();
+			if (!$this->isRecordExists($bottlesPerCase)) {
+				$sql_query = "INSERT INTO bottle_per_case_master (botpercase) VALUES ($bottlesPerCase)";
+				
+				if ($this->mysqli->query($sql_query)) {
+					return true;
+				}
+				return false;
 			}
-			return "";
+		}
+		return false;
+	}
+	
+	private function deleteBottlePerCaseMasterRecord($id) {
+		if ($id > 0) {
+			if ($this->isRecordExists($id)) {
+				$sql_query = "DELETE FROM bottle_per_case_master WHERE botpercase = $id";
+				if ($this->mysqli->query($sql_query)) {
+					return $this->getBottlesPerCaseList();
+				}
+			}
 		}
 		return "";
 	}
 	
-	private function deleteBottlePerCaseMasterRecord($postParams) {
-		$id = $postParams['id'];
-		if ($id > 0) {
-			$sql_query = "DELETE FROM bottle_per_case_master WHERE botpercase = $id";
-			if ($this->mysqli->query($sql_query)) {
-				return $this->getBottlesPerCaseList();
+	private function loadDataFromCSVFile($fileName) {
+		ini_set('auto_detect_line_endings', TRUE);
+		$csv_file = CSV_PATH . $fileName;
+		$row = 1;
+		if (($handle = fopen($csv_file, "r")) !== FALSE) {
+			$firstRow = "";
+			while (($data = fgetcsv($handle, 1000, "\n")) !== FALSE) {
+				$numOfColumn = count($data);
+				if ($row == 1) {
+					$firstRow = trim($data[0]);
+				} else {
+					//trim($firstRow) == "botpercase" && 
+					if (is_numeric($data[0])) {
+						$this->addBottlesPerCase($data[0]);
+					}
+				}
+				$row++;
 			}
+			fclose($handle);
 		}
-		return "";
+		ini_set('auto_detect_line_endings', FALSE);
+		unlink(CSV_PATH . $fileName);
+		return $this->getBottlesPerCaseList();
 	}
 	
 	public function getBottlesPerCaseList() {
