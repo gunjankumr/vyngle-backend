@@ -1,5 +1,6 @@
 <?php
 include_once 'more/bottlepercase/bottlepercase_server.php';
+include_once 'more/city/city_server.php';
 
 class AdminApi {
 
@@ -10,6 +11,10 @@ class AdminApi {
 					$objBottlePerCase = new BottlePerCase();
 					$objBottlePerCase->performAction($action, $params);
 					break;
+					case "city":
+						$objCity = new City();
+						$objCity->performAction($action, $params);
+						break;
 				default:
 					break;
 			}

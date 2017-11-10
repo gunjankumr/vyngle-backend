@@ -42,7 +42,7 @@ function openMoreBottlePerCaseForm() {
 }
 
 function openCityForm() {
-    document.getElementById("menuaction").innerHTML='<object type="text/html" data="html/more/city/city.php" ></object>';
+    document.getElementById("menuaction").innerHTML='<object class="formsection" type="text/html" type="text/html" data="html/more/city/city.php" ></object>';
 }
 
 function openCountryForm() {
