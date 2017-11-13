@@ -1,6 +1,7 @@
 <?php
 include_once 'uploadbase.php';
 require_once __DIR__ . '/more/bottlepercase/bottlepercase_server.php';
+require_once __DIR__ . '/more/city/city_server.php';
 
 class Upload extends UploadBase {
 
@@ -9,6 +10,9 @@ class Upload extends UploadBase {
 			switch ($pageName) {
 				case "bottlepercase":
 					$this->loadBottlesPerCaseData($fileName);
+					break;
+				case "city":
+					$this->loadCityData($fileName);
 					break;
 				default:
 					break;
@@ -20,6 +24,13 @@ class Upload extends UploadBase {
 		if (isset($fileName)) {
 			$objBottlePerCase = new BottlePerCase();
 			$objBottlePerCase->performAction("uploadDataFromCSVFile", $fileName);
+		}
+	}
+	
+	private function loadCityData($fileName) {
+		if (isset($fileName)) {
+			$objCity = new City();
+			$objCity->performAction("uploadDataFromCSVFile", $fileName);
 		}
 	}
 }

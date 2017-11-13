@@ -14,13 +14,6 @@ table {
 	border: 1px solid #32414e;
 }
 
-/*   html, body {   */
-/*       width: 95% !important;   */
-/*       height: 95% !important;  */
-/*       padding:0;  */
-/*       margin:0;  */
-/*   }   */
-
 table {
     margin: 0 auto;
 }
@@ -62,13 +55,13 @@ form{
 <script src="../../../js/commonmethods.js"></script>
 <script>
 
- function deleteRecord(recId) {
+ function deleteRecord(city) {
 	 var r = confirm("Are you sure you want to delete the record?");
 	 if (r == true) {
 		 var request = $.ajax({
 		   url: "../../../../../api/admin_api.php?function=city&action=deleteCityMasterRecord",
 		   type: "POST",
-		   data: {id : recId},
+		   data: {cityName : city},
 		   dataType: "html"
 		 });
 
@@ -91,7 +84,7 @@ form{
 	 	var request = $.ajax({
 		   url: "../../../../../api/admin_api.php?function=city&action=addCityMasterRecord",
 		   type: "POST",
-		   data: {id : city},
+		   data: {cityName : city},
 		   dataType: "html"
 		 });
 
@@ -141,7 +134,7 @@ form{
 				<table>
 					<tr style="margin-left: 10px;">
 						<td width="100%" style="padding: 10px 10px 10px 10px;">
-							Enter city name:<br/>
+							Enter City name:<br/>
 							<input type="text" id="text_input_new_entry"/>
 							<button id="btn_add" onClick="addRecord()">Add</button>
 						</td>
@@ -163,7 +156,5 @@ form{
 			</td>
 		</tr>
 	</table>
-	
-
 </body>
 </html>

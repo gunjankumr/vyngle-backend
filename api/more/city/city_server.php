@@ -1,5 +1,4 @@
 <?php
-
 require_once __DIR__ . '/../../uploadbase.php';
 require_once __DIR__ . '/../../dbbase.php';
 
@@ -12,11 +11,11 @@ class City extends DbBase {
 		if (isset($action) && strlen($action) > 0) {
 			switch ($action) {
 				case "deleteCityMasterRecord":
-					$response = $this->deleteCityMasterRecord($params['id']);
+					$response = $this->deleteCityMasterRecord($params['cityName']);
 					echo $response;
 					break;
 				case "addCityMasterRecord":
-					if ($this->addCity($params['id'])) {
+					if ($this->addCity($params['cityName'])) {
 						echo $this->getCityList();
 						return;
 					}
@@ -32,8 +31,8 @@ class City extends DbBase {
 		}
 	}
 
-	private function isRecordExists($id) {
-		$sql_query = "SELECT * FROM city_master WHERE botpercase = $id";
+	private function isRecordExists($cityName) {
+		$sql_query = "SELECT * FROM city_master WHERE city = '$cityName'";
 		$result = $this->mysqli->query($sql_query);
 
 		$arrCity = array();
@@ -44,9 +43,9 @@ class City extends DbBase {
 	}
 
 	private function addCity($city) {
-		if ($city > 0) {
+		if (isset($city)) {
 			if (!$this->isRecordExists($city)) {
-				$sql_query = "INSERT INTO city_master (botpercase) VALUES ($city)";
+				$sql_query = "INSERT INTO city_master (city) VALUES ('$city')";
 
 				if ($this->mysqli->query($sql_query)) {
 					return true;
@@ -57,10 +56,10 @@ class City extends DbBase {
 		return false;
 	}
 
-	private function deleteCityMasterRecord($id) {
-		if ($id > 0) {
-			if ($this->isRecordExists($id)) {
-				$sql_query = "DELETE FROM city_master WHERE botpercase = $id";
+	private function deleteCityMasterRecord($city) {
+		if (isset($city)) {
+			if ($this->isRecordExists($city)) {
+				$sql_query = "DELETE FROM city_master WHERE city = '$city'";
 				if ($this->mysqli->query($sql_query)) {
 					return $this->getCityList();
 				}
@@ -81,7 +80,7 @@ class City extends DbBase {
 					$firstRow = trim($data[0]);
 				} else {
 					//trim($firstRow) == "botpercase" &&
-					if (is_numeric($data[0])) {
+					if (!is_numeric($data[0])) {
 						$this->addCity($data[0]);
 					}
 				}

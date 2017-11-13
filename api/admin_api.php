@@ -11,10 +11,10 @@ class AdminApi {
 					$objBottlePerCase = new BottlePerCase();
 					$objBottlePerCase->performAction($action, $params);
 					break;
-					case "city":
-						$objCity = new City();
-						$objCity->performAction($action, $params);
-						break;
+				case "city":
+					$objCity = new City();
+					$objCity->performAction($action, $params);
+					break;
 				default:
 					break;
 			}
