@@ -3,6 +3,11 @@ include_once 'more/bottlepercase/bottlepercase_server.php';
 include_once 'more/city/city_server.php';
 include_once 'more/country/country_server.php';
 include_once 'more/contactus/contactus_server.php';
+include_once 'more/critics/critics_server.php';
+include_once 'more/criticsscore/criticsscore_server.php';
+include_once 'more/currency/currency_server.php';
+include_once 'more/itemsize/itemsize_server.php';
+
 
 class AdminApi {
 
