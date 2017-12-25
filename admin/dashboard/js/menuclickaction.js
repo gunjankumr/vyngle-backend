@@ -46,59 +46,59 @@ function openCityForm() {
 }
 
 function openCountryForm() {
-    document.getElementById("menuaction").innerHTML='<object type="text/html" data="html/more/country/country.php" ></object>';
+    document.getElementById("menuaction").innerHTML='<object class="formsection" type="text/html" type="text/html" data="html/more/country/country.php" ></object>';
 }
 
 function openContactUsForm() {
-    document.getElementById("menuaction").innerHTML='<object type="text/html" data="html/more/contactus/contactus.php" ></object>';
+    document.getElementById("menuaction").innerHTML='<object class="formsection" type="text/html" type="text/html" data="html/more/contactus/contactus.php" ></object>';
 }
 
 function openCriticsForm() {
-    document.getElementById("menuaction").innerHTML='<object type="text/html" data="html/more/critics/critics.php" ></object>';
+    document.getElementById("menuaction").innerHTML='<object class="formsection" type="text/html" type="text/html" data="html/more/critics/critics.php" ></object>';
 }
 
 function openCriticsScoreForm() {
-    document.getElementById("menuaction").innerHTML='<object type="text/html" data="html/more/criticsscore/criticsscore.php" ></object>';
+    document.getElementById("menuaction").innerHTML='<object class="formsection" type="text/html" type="text/html" data="html/more/criticsscore/criticsscore.php" ></object>';
 }
 
 function openCurrencyForm() {
-    document.getElementById("menuaction").innerHTML='<object type="text/html" data="html/more/currency/currency.php" ></object>';
+    document.getElementById("menuaction").innerHTML='<object class="formsection" type="text/html" type="text/html" data="html/more/currency/currency.php" ></object>';
 }
 
 function openGeographyForm() {
-    document.getElementById("menuaction").innerHTML='<object type="text/html" data="html/more/geography/geography.php" ></object>';
+    document.getElementById("menuaction").innerHTML='<object class="formsection" type="text/html" type="text/html" data="html/more/geography/geography.php" ></object>';
 }
 
 function openItemSizeForm() {
-    document.getElementById("menuaction").innerHTML='<object type="text/html" data="html/more/item/itemsize.php" ></object>';
+    document.getElementById("menuaction").innerHTML='<object class="formsection" type="text/html" type="text/html" data="html/more/item/itemsize.php" ></object>';
 }
 
 function openLegalInformationsForm() {
-    document.getElementById("menuaction").innerHTML='<object type="text/html" data="html/more/legalinformation/legalinformation.php" ></object>';
+    document.getElementById("menuaction").innerHTML='<object class="formsection" type="text/html" type="text/html" data="html/more/legalinformation/legalinformation.php" ></object>';
 }
 
 function openMarketingTextForm() {
-    document.getElementById("menuaction").innerHTML='<object type="text/html" data="html/more/marketingtext/marketingtext.php" ></object>';
+    document.getElementById("menuaction").innerHTML='<object class="formsection" type="text/html" type="text/html" data="html/more/marketingtext/marketingtext.php" ></object>';
 }
 
 function openStatusForm() {
-    document.getElementById("menuaction").innerHTML='<object type="text/html" data="html/more/status/status.php" ></object>';
+    document.getElementById("menuaction").innerHTML='<object class="formsection" type="text/html" type="text/html" data="html/more/status/status.php" ></object>';
 }
 
 function openTaxForm() {
-    document.getElementById("menuaction").innerHTML='<object type="text/html" data="html/more/tax/tax.php" ></object>';
+    document.getElementById("menuaction").innerHTML='<object class="formsection" type="text/html" type="text/html" data="html/more/tax/tax.php" ></object>';
 }
 
 function openVarietalForm() {
-    document.getElementById("menuaction").innerHTML='<object type="text/html" data="html/more/varietal/varietal.php" ></object>';
+    document.getElementById("menuaction").innerHTML='<object class="formsection" type="text/html" type="text/html" data="html/more/varietal/varietal.php" ></object>';
 }
 
 function openVintageForm() {
-    document.getElementById("menuaction").innerHTML='<object type="text/html" data="html/more/vintage/vintage.php" ></object>';
+    document.getElementById("menuaction").innerHTML='<object class="formsection" type="text/html" type="text/html" data="html/more/vintage/vintage.php" ></object>';
 }
 
 function openWineTypeForm() {
-    document.getElementById("menuaction").innerHTML='<object type="text/html" data="html/more/winetype/winetype.php" ></object>';
+    document.getElementById("menuaction").innerHTML='<object class="formsection" type="text/html" type="text/html" data="html/more/winetype/winetype.php" ></object>';
 }
 
 // End Sub menu more
