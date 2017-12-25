@@ -1,3 +1,10 @@
+<?php
+if (!isset($_COOKIE["admin_name"])) {
+	session_unset();
+	session_destroy();
+	header("Location: index.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -69,7 +76,7 @@
                         <ul class="dropdown-menu extended logout">
                             <div class="log-arrow-up"></div>
                             <li>
-                                <a href="index.html"><i class="icon_key_alt"></i> Log Out</a>
+                                <a href="logout.php"><i class="icon_key_alt"></i> Log Out</a>
                             </li>
                         </ul>
                     </li>
