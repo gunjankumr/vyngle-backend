@@ -1,7 +1,7 @@
 <?php
-include_once '../../../../../api/more/city/city_server.php';
+include_once '../../../../../api/more/geography/geography_server.php';
 
-$objCity = new City();
+$objGeography = new Geography();
 $cityListStr = $objCity->getCityList();
 ?>
 </html>

@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../../uploadbase.php';
 require_once __DIR__ . '/../../dbbase.php';
 
-class City extends DbBase {
+class Geography extends DbBase {
 	function __construct() {
 		parent::__construct();
 	}
@@ -10,13 +10,13 @@ class City extends DbBase {
 	public function performAction($action, $params) {
 		if (isset($action) && strlen($action) > 0) {
 			switch ($action) {
-				case "deleteCityMasterRecord":
-					$response = $this->deleteCityMasterRecord($params['cityName']);
+				case "deleteGeographyMasterRecord":
+					$response = $this->deleteGeographyMasterRecord($params['geographyName']);
 					echo $response;
 					break;
-				case "addCityMasterRecord":
-					if ($this->addCity($params['cityName'])) {
-						echo $this->getCityList();
+				case "addGeographyMasterRecord":
+					if ($this->addGeography($params['geographyName'])) {
+						echo $this->getGeographyList();
 						return;
 					}
 					echo "";
@@ -31,8 +31,8 @@ class City extends DbBase {
 		}
 	}
 
-	private function isRecordExists($cityName) {
-		$sql_query = "SELECT * FROM city_master WHERE city = '$cityName'";
+	private function isRecordExists($geographyName) {
+		$sql_query = "SELECT * FROM geography_master WHERE city = '$cityName'";
 		$result = $this->mysqli->query($sql_query);
 
 		$arrCity = array();
