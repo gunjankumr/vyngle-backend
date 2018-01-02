@@ -5,9 +5,10 @@ $objGeography = new Geography();
  $geographyListStr = $objGeography->getGeographyList();
 ?>
 <head>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<link href="../../../css/jquery-ui-1.10.4.min.css" rel="stylesheet">    
+<script src="../../../js/jquery-1.8.3.min.js"></script>
+<script src="../../../js/jquery-ui-1.9.2.custom.min.js"></script>
+<script src="../../../js/commonmethods.js"></script>
 </head>
 </html>
 <style>
@@ -62,17 +63,21 @@ form{
    padding:5px;
    background-color:#fff;
    border:1px solid #ccc;
- 
 }
 
 </style>
-<script src="../../../js/jquery-1.8.3.min.js"></script>
-<script src="../../../js/commonmethods.js"></script>
 <script>
-
+var opt = {
+        autoOpen: false,
+        modal: true,
+        width: 550,
+        height:650
+};
 
 function display() {
-	$("#dialog").dialog("open");
+// 	$("#dialog").dialog("open");
+	var theDialog = $("#dialog").dialog(opt);
+	theDialog.dialog("open");
 	return false;
 }
 
@@ -123,28 +128,7 @@ function editRecord(record, newrecord) {
  }
 
  function addRecord() {
-	 var city = $('#text_input_new_entry').val();
-	 if (city.length > 0) {
-		$('#text_input_new_entry').val(""); 
-	 	var request = $.ajax({
-		   url: "../../../../../api/admin_api.php?function=city&action=addCityMasterRecord",
-		   type: "POST",
-		   data: {cityName : city},
-		   dataType: "html"
-		 });
-
-		 request.done(function(msg) {
-			if (msg.length > 0) {
-				$("#city-list").html(msg);
-			}
-		 });
-
-		 request.fail(function(jqXHR, textStatus) {
-		   alert( "Request failed: " + textStatus );
-		 });
-	 } else {
-		alert("Please input city!");
-	 }
+	 display();
  }
 
  function uploadResponse(responseStatus) {
