@@ -2,8 +2,13 @@
 include_once '../../../../../api/more/geography/geography_server.php';
 
 $objGeography = new Geography();
-$cityListStr = $objCity->getCityList();
+ $geographyListStr = $objGeography->getGeographyList();
 ?>
+<head>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+</head>
 </html>
 <style>
 table {
@@ -28,6 +33,16 @@ table th {
 	vertical-align: middle;
 }
 
+  .customButton {
+   		 background-color: #394a59; /* Grey */
+    	 border: none;
+   		 color: white;
+    	 padding: 15px 32px;
+    	 text-align: center;
+    	 text-decoration: none;
+    	 display: inline-block;
+         font-size: 16px;
+	}
 #f1_upload_process{
    z-index:100;
    position:absolute;
@@ -55,19 +70,49 @@ form{
 <script src="../../../js/commonmethods.js"></script>
 <script>
 
- function deleteRecord(city) {
-	 var r = confirm("Are you sure you want to delete the record?");
+
+function display() {
+	$("#dialog").dialog("open");
+	return false;
+}
+
+function editRecord(record, newrecord) {
+	 var r = confirm("Are you sure you want to edit the record?");
 	 if (r == true) {
 		 var request = $.ajax({
-		   url: "../../../../../api/admin_api.php?function=city&action=deleteCityMasterRecord",
+		   url: "../../../../../api/admin_api.php?function=geography&action=editGeographyMasterRecord",
 		   type: "POST",
-		   data: {cityName : city},
+		   data: {record : record, newrecord : newrecord},
 		   dataType: "html"
 		 });
 
 		 request.done(function(msg) {
 			if (msg.length > 0) {
-				$("#city-list").html(msg);
+				$("#geography-list").html(msg);
+				
+			}
+		 });
+
+		 request.fail(function(jqXHR, textStatus) {
+		   alert( "Request failed: " + textStatus );
+		 });    
+	 }
+}
+
+ function deleteRecord(record) {
+	 var r = confirm("Are you sure you want to delete the record?");
+	 if (r == true) {
+		 var request = $.ajax({
+		   url: "../../../../../api/admin_api.php?function=geography&action=deleteGeographyMasterRecord",
+		   type: "POST",
+		   data: {record : record},
+		   dataType: "html"
+		 });
+
+		 request.done(function(msg) {
+			if (msg.length > 0) {
+				$("#geography-list").html(msg);
+				
 			}
 		 });
 
@@ -120,41 +165,44 @@ form{
 </script>
  
 <body>
+    <div id="dialog" title="Record" style="display:none">
+    	<table>
+			<tr>
+				<th>Country</th>
+				<th>Region</th>
+				<th>Sub Region</th>
+				<th>Appellation</th>
+				<th>Action</th>
+			</tr>
+		</table>
+    </div>
+
 	<table id="main">
 		<tr>
-			<th colspan="2"><p>City</p></th>
+			<th colspan="5"><p>Geography</p></th>
+		</tr>
+		<tr style="margin-left: 10px; border: 1px solid #32414e;">
+			<td colspan="2" width="50%" style="padding: 10px 10px 10px 10px;">
+				<button id="btn_add" class="customButton" onClick="addRecord()">Add New Record</button>
+			</td>
+			<td colspan="3" width="%" style="padding: 10px 10px 10px 10px;">											
+				Upload CSV File <br/>
+				<form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
+        		<input type="file" name="file" id="fileToUpload" required onChange="validateInput(this)" />
+       			<input type="submit" value="Upload" />
+   				</form>
+			</td>
 		</tr>
 		<tr>
-			<td width="60%" id="city-list">
-				<!-- Displays the existing data -->
-				<?php echo $cityListStr;?>
-			</td>
-			<td width="%" valign="top">
-				<!-- Add new data and also shows option to upload csv -->
-				<table>
-					<tr style="margin-left: 10px;">
-						<td width="100%" style="padding: 10px 10px 10px 10px;">
-							Enter City name:<br/>
-							<input type="text" id="text_input_new_entry"/>
-							<button id="btn_add" onClick="addRecord()">Add</button>
-						</td>
-					</tr>
-					<tr>
-					<th style="height: 30px;">Or</th>
-					</tr>
-					<tr style="margin-left: 10px;">
-						<td width="100%" style="padding: 10px 10px 10px 10px;">											
-							Upload CSV File <br/>
-							<form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
-        						 <input type="file" name="file" id="fileToUpload" required onChange="validateInput(this)" />
-       							 <input type="submit" value="Upload" />
-   							</form>
-							<br/>							
-						</td>
-					</tr>
-				</table>
-			</td>
+				<th>Country</th>
+				<th>Region</th>
+				<th>Sub Region</th>
+				<th>Appellation</th>
+				<th>Action</th>
 		</tr>
-	</table>
+		<tbody id="geography-list">
+			<?php echo $geographyListStr?>
+		</tbody>
+	</table>	
 </body>
 </html>

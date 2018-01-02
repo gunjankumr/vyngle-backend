@@ -14,7 +14,6 @@ if (!isset($_COOKIE["admin_name"])) {
     <meta name="author" content="GeeksLabs">
     <meta name="keyword" content="Creative, Dashboard, Admin, Template, Theme, Bootstrap, Responsive, Retina, Minimal">
     <link rel="shortcut icon" href="img/favicon.png">
-
     <title>Vyngle Admin Dashboard</title>
 
     <!-- Bootstrap CSS -->    
