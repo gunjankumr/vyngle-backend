@@ -67,34 +67,77 @@ form{
 
 </style>
 <script>
+var currentRecord = "";
 var opt = {
         autoOpen: false,
         modal: true,
-        width: 550,
-        height:650
+        width: 400,
+        height:300,
+        position: 'top'
 };
 
 function display() {
-// 	$("#dialog").dialog("open");
 	var theDialog = $("#dialog").dialog(opt);
 	theDialog.dialog("open");
+	if(currentRecord.length > 0) {
+		var res = currentRecord.split("#");		
+		$('#country').val(res[0]);
+		$('#region').val(res[1]);
+		$('#subregion').val(res[2]);
+		$('#appellation').val(res[3]);
+	}
 	return false;
 }
 
-function editRecord(record, newrecord) {
-	 var r = confirm("Are you sure you want to edit the record?");
+function cancelClicked() {
+	var theDialog = $("#dialog").dialog(opt);
+	theDialog.dialog("close");
+	return true;
+}
+
+function submitClicked() {
+	  var country = $('#country').val();
+	  var region = $('#region').val();
+	  var subregion = $('#subregion').val();
+	  var appellation = $('#appellation').val();
+	  var newRecord = country + "#" + region + "#" + subregion + "#" + appellation
+	  if (country==null || country=="")
+      {
+        alert("Please enter country");
+        return false; 
+      }
+	  else 	if(currentRecord.length > 0) { // Update data using Edit button
+		  editRecordSubmit(currentRecord, newRecord);
+	  }
+	  else { // Add new record using Add Record
+		  addRecordSubmit(newRecord);
+	  }
+}
+
+
+
+function editRecord(record) {
+	currentRecord = record;
+	display();
+	return;
+}
+
+function editRecordSubmit(currentRecord, newRecord) {
+	var allRecord = currentRecord + "##" + newRecord
+	alert("allRecord " + allRecord);
+	
+	 var r = confirm("Are you sure you want to save the record?");
 	 if (r == true) {
 		 var request = $.ajax({
 		   url: "../../../../../api/admin_api.php?function=geography&action=editGeographyMasterRecord",
 		   type: "POST",
-		   data: {record : record, newrecord : newrecord},
+		   data: {record : allRecord},
 		   dataType: "html"
 		 });
 
 		 request.done(function(msg) {
 			if (msg.length > 0) {
 				$("#geography-list").html(msg);
-				
 			}
 		 });
 
@@ -117,10 +160,8 @@ function editRecord(record, newrecord) {
 		 request.done(function(msg) {
 			if (msg.length > 0) {
 				$("#geography-list").html(msg);
-				
 			}
 		 });
-
 		 request.fail(function(jqXHR, textStatus) {
 		   alert( "Request failed: " + textStatus );
 		 });    
@@ -131,9 +172,33 @@ function editRecord(record, newrecord) {
 	 display();
  }
 
+ function addRecordSubmit(newRecord) {
+	 var r = confirm("Are you sure you want to add the record?");
+	 if (r == true) {
+		 var request = $.ajax({
+		   url: "../../../../../api/admin_api.php?function=geography&action=addGeographyMasterRecord",
+		   type: "POST",
+		   data: {record : newRecord},
+		   dataType: "html"
+		 });
+
+		 request.done(function(msg) {
+			if (msg.length > 0) {
+				$("#geography-list").html(msg);
+				
+			}
+		 });
+
+		 request.fail(function(jqXHR, textStatus) {
+		   alert( "Request failed: " + textStatus );
+		 });    
+	 }
+ }
+ 
+
  function uploadResponse(responseStatus) {
 	 if (responseStatus.length > 0) {
-		$("#city-list").html(responseStatus);
+		$("#geography-list").html(responseStatus);
 		$("#fileToUpload").val('');
 	 }
  }
@@ -141,7 +206,7 @@ function editRecord(record, newrecord) {
  function submitForm() {
 	 if (validateInput(document.getElementById("fileToUpload")) == true) {
 	     var formData = new FormData(document.getElementById("fileinfo"));
-	     formData.append("pagename", "city");
+	     formData.append("pagename", "geography");
 	     upload(uploadResponse, formData);
 	     return false;
 	 }
@@ -150,15 +215,28 @@ function editRecord(record, newrecord) {
  
 <body>
     <div id="dialog" title="Record" style="display:none">
-    	<table>
-			<tr>
-				<th>Country</th>
-				<th>Region</th>
-				<th>Sub Region</th>
-				<th>Appellation</th>
-				<th>Action</th>
-			</tr>
-		</table>
+    <form>
+  		<div class="form-group">
+    		<label>Country:</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    		<input type="text" class="form-control" id="country">
+  		</div>
+  		<div class="form-group">
+   			<label>Region:</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    		<input type="text" class="form-control" id="region">
+  		</div>
+  		<div class="form-group">
+    		<label>Sub Region:</label>
+    		<input type="text" class="form-control" id="subregion">
+  		</div>
+  		<div class="form-group">
+   			<label>Appellation:</label>
+    		<input type="text" class="form-control" id="appellation">
+  		</div>
+  		<br>
+  		<button class="customButton" onClick="submitClicked()">Submit</button>
+  		<button class="customButton" onClick="cancelClicked()">Cancel</button>
+  		
+	</form>    
     </div>
 
 	<table id="main">

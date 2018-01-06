@@ -15,11 +15,11 @@ class Geography extends DbBase {
 					echo $response;
 					break;
 			    case "editGeographyMasterRecord":
-					$response = $this->editGeographyMasterRecord($params['record'], $params['newrecord']);						
+					$response = $this->editGeographyMasterRecord($params['record']);						
 					echo $response;
 					break;
 				case "addGeographyMasterRecord":
-					if ($this->addGeography($params['geographyName'])) {
+					if ($this->addGeography($params['record'])) {
 						echo $this->getGeographyList();
 						return;
 					}
@@ -45,11 +45,11 @@ class Geography extends DbBase {
 		return false;
 	}
 
-	private function addGeography($country, $region, $sub_region, $appellation) {
-		if (isset($country) && isset($region) && isset($sub_region) && isset($appellation)) {
-			$record = $country."#".$region."#".$sub_region."#".$appellation;
+	private function addGeography($record) {
+		if (isset($record)) {
+			$cols = explode("#", $record);
 			if (!$this->isRecordExists($record)) {
-				$sql_query = "INSERT INTO geography_master (country, region, sub_region, appellation) VALUES ('$country', '$region', '$sub_region', '$appellation')";
+				$sql_query = "INSERT INTO geography_master (country, region, sub_region, appellation) VALUES ('$cols[0]', '$cols[1]', '$cols[2]', '$cols[3]')";
 				if ($this->mysqli->query($sql_query)) {
 					return true;
 				}
@@ -72,11 +72,14 @@ class Geography extends DbBase {
 		return "";
 	}
 	
-	private function editGeographyMasterRecord($record, $oldRecord) {
-		if (isset($oldRecord)) {
+	private function editGeographyMasterRecord($record) {
+		if (isset($record)) {
+			$allRecord = explode("##", $record);
+			$oldRecord = $allRecord[0];
+			$newRecord = $allRecord[1];
 			if ($this->isRecordExists($oldRecord)) {
 				$cols = explode("#", $oldRecord);
-				$colsNew = explode("#", $record);
+				$colsNew = explode("#", $newRecord);
 				$sql_query = "update geography_master set country = '$colsNew[0]' AND region = '$colsNew[1]' AND sub_region = '$colsNew[2]' AND appellation = '$colsNew[3]'  WHERE country = '$cols[0]' AND region = '$cols[1]' AND sub_region = '$cols[2]' AND appellation = '$cols[3]'";
 				if ($this->mysqli->query($sql_query)) {
 					return $this->getGeographyList();
