@@ -7,6 +7,7 @@ include_once 'more/critics/critics_server.php';
 include_once 'more/criticsscore/criticsscore_server.php';
 include_once 'more/currency/currency_server.php';
 include_once 'more/itemsize/itemsize_server.php';
+include_once 'more/geography/geography_server.php';
 
 
 class AdminApi {
