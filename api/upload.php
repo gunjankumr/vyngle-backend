@@ -2,6 +2,7 @@
 include_once 'uploadbase.php';
 require_once __DIR__ . '/more/bottlepercase/bottlepercase_server.php';
 require_once __DIR__ . '/more/city/city_server.php';
+require_once __DIR__ . '/more/geography/geography_server.php';
 
 class Upload extends UploadBase {
 
@@ -13,6 +14,9 @@ class Upload extends UploadBase {
 					break;
 				case "city":
 					$this->loadCityData($fileName);
+					break;
+				case "geography":
+					$this->loadGeographyData($fileName);
 					break;
 				default:
 					break;
@@ -31,6 +35,13 @@ class Upload extends UploadBase {
 		if (isset($fileName)) {
 			$objCity = new City();
 			$objCity->performAction("uploadDataFromCSVFile", $fileName);
+		}
+	}
+	
+	private function loadGeographyData($fileName) {
+		if (isset($fileName)) {
+			$objGeography = new Geography();
+			$objGeography->performAction("uploadDataFromCSVFile", $fileName);
 		}
 	}
 }

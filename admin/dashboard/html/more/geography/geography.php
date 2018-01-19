@@ -2,7 +2,7 @@
 include_once '../../../../../api/more/geography/geography_server.php';
 
 $objGeography = new Geography();
- $geographyListStr = $objGeography->getGeographyList();
+$geographyListStr = $objGeography->getGeographyList();
 ?>
 <head>
 <link href="../../../css/jquery-ui-1.10.4.min.css" rel="stylesheet">    
@@ -77,6 +77,11 @@ var opt = {
 };
 
 function display() {
+	$('#country').val("");
+	$('#region').val("");
+	$('#subregion').val("");
+	$('#appellation').val("");
+	
 	var theDialog = $("#dialog").dialog(opt);
 	theDialog.dialog("open");
 	if(currentRecord.length > 0) {
@@ -89,32 +94,29 @@ function display() {
 	return false;
 }
 
-function cancelClicked() {
+function closeModalDialog() {
+	currentRecord = "";
 	var theDialog = $("#dialog").dialog(opt);
 	theDialog.dialog("close");
 	return true;
 }
 
 function submitClicked() {
-	  var country = $('#country').val();
-	  var region = $('#region').val();
-	  var subregion = $('#subregion').val();
-	  var appellation = $('#appellation').val();
-	  var newRecord = country + "#" + region + "#" + subregion + "#" + appellation
-	  if (country==null || country=="")
-      {
-        alert("Please enter country");
-        return false; 
-      }
-	  else 	if(currentRecord.length > 0) { // Update data using Edit button
-		  editRecordSubmit(currentRecord, newRecord);
-	  }
-	  else { // Add new record using Add Record
-		  addRecordSubmit(newRecord);
-	  }
+	var country = $('#country').val();
+	var region = $('#region').val();
+	var subregion = $('#subregion').val();
+	var appellation = $('#appellation').val();
+	var newRecord = country + "#" + region + "#" + subregion + "#" + appellation;
+
+	if (country == null || country == "") {
+		alert("Please enter country");
+		return false;
+    } else if(currentRecord.length > 0) { // Update data using Edit button
+		editRecordSubmit(currentRecord, newRecord);
+	} else { // Add new record using Add Record
+		addRecordSubmit(newRecord);
+	}
 }
-
-
 
 function editRecord(record) {
 	currentRecord = record;
@@ -123,28 +125,28 @@ function editRecord(record) {
 }
 
 function editRecordSubmit(currentRecord, newRecord) {
-	var allRecord = currentRecord + "##" + newRecord
-	alert("allRecord " + allRecord);
+	var allRecord = currentRecord + "@~@" + newRecord;
 	
-	 var r = confirm("Are you sure you want to save the record?");
-	 if (r == true) {
-		 var request = $.ajax({
-		   url: "../../../../../api/admin_api.php?function=geography&action=editGeographyMasterRecord",
-		   type: "POST",
-		   data: {record : allRecord},
-		   dataType: "html"
-		 });
+	var r = confirm("Are you sure you want to save the record?");
+	if (r == true) {
+		var request = $.ajax({
+			url: "../../../../../api/admin_api.php?function=geography&action=editGeographyMasterRecord",
+		   	type: "POST",
+		   	data: {record : allRecord},
+		   	dataType: "html"
+		});
 
-		 request.done(function(msg) {
+		request.done(function(msg) {
+			closeModalDialog();
 			if (msg.length > 0) {
 				$("#geography-list").html(msg);
 			}
-		 });
+		});
 
-		 request.fail(function(jqXHR, textStatus) {
-		   alert( "Request failed: " + textStatus );
-		 });    
-	 }
+		request.fail(function(jqXHR, textStatus) {
+			alert( "Request failed: " + textStatus );
+		});    
+	}
 }
 
  function deleteRecord(record) {
@@ -163,7 +165,7 @@ function editRecordSubmit(currentRecord, newRecord) {
 			}
 		 });
 		 request.fail(function(jqXHR, textStatus) {
-		   alert( "Request failed: " + textStatus );
+		 	alert("Request failed: " + textStatus);
 		 });    
 	 }
  }
@@ -183,19 +185,18 @@ function editRecordSubmit(currentRecord, newRecord) {
 		 });
 
 		 request.done(function(msg) {
+			closeModalDialog();
 			if (msg.length > 0) {
 				$("#geography-list").html(msg);
-				
 			}
 		 });
 
 		 request.fail(function(jqXHR, textStatus) {
-		   alert( "Request failed: " + textStatus );
+		 	alert( "Request failed: " + textStatus );
 		 });    
 	 }
  }
  
-
  function uploadResponse(responseStatus) {
 	 if (responseStatus.length > 0) {
 		$("#geography-list").html(responseStatus);
@@ -215,7 +216,6 @@ function editRecordSubmit(currentRecord, newRecord) {
  
 <body>
     <div id="dialog" title="Record" style="display:none">
-    <form>
   		<div class="form-group">
     		<label>Country:</label>&nbsp;&nbsp;&nbsp;&nbsp;
     		<input type="text" class="form-control" id="country">
@@ -233,10 +233,8 @@ function editRecordSubmit(currentRecord, newRecord) {
     		<input type="text" class="form-control" id="appellation">
   		</div>
   		<br>
-  		<button class="customButton" onClick="submitClicked()">Submit</button>
-  		<button class="customButton" onClick="cancelClicked()">Cancel</button>
-  		
-	</form>    
+  		<button class="customButton" id="dialogSaveButton" onClick="submitClicked();">Submit</button>
+  		<button class="customButton" id="dialogCancelButton" onClick="closeModalDialog();">Cancel</button>   
     </div>
 
 	<table id="main">
@@ -263,7 +261,7 @@ function editRecordSubmit(currentRecord, newRecord) {
 				<th>Action</th>
 		</tr>
 		<tbody id="geography-list">
-			<?php echo $geographyListStr?>
+			<?php echo $geographyListStr;?>
 		</tbody>
 	</table>	
 </body>
