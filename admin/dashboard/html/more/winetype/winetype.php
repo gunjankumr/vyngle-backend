@@ -1,9 +1,15 @@
 <?php
-include_once '../../../../../api/more/city/city_server.php';
+include_once '../../../../../api/more/winetype/winetype_server.php';
 
-$objCity = new City();
-$cityListStr = $objCity->getCityList();
+$objGeography = new Geography();
+$geographyListStr = $objGeography->getGeographyList();
 ?>
+<head>
+<link href="../../../css/jquery-ui-1.10.4.min.css" rel="stylesheet">    
+<script src="../../../js/jquery-1.8.3.min.js"></script>
+<script src="../../../js/jquery-ui-1.9.2.custom.min.js"></script>
+<script src="../../../js/commonmethods.js"></script>
+</head>
 </html>
 <style>
 table {
@@ -28,6 +34,16 @@ table th {
 	vertical-align: middle;
 }
 
+  .customButton {
+   		 background-color: #394a59; /* Grey */
+    	 border: none;
+   		 color: white;
+    	 padding: 15px 32px;
+    	 text-align: center;
+    	 text-decoration: none;
+    	 display: inline-block;
+         font-size: 16px;
+	}
 #f1_upload_process{
    z-index:100;
    position:absolute;
@@ -47,64 +63,143 @@ form{
    padding:5px;
    background-color:#fff;
    border:1px solid #ccc;
- 
 }
 
 </style>
-<script src="../../../js/jquery-1.8.3.min.js"></script>
-<script src="../../../js/commonmethods.js"></script>
 <script>
+var currentRecord = "";
+var opt = {
+        autoOpen: false,
+        modal: true,
+        width: 400,
+        height:300,
+        position: 'top'
+};
 
- function deleteRecord(city) {
+function display() {
+	$('#country').val("");
+	$('#region').val("");
+	$('#subregion').val("");
+	$('#appellation').val("");
+	
+	var theDialog = $("#dialog").dialog(opt);
+	theDialog.dialog("open");
+	if(currentRecord.length > 0) {
+		var res = currentRecord.split("#");		
+		$('#country').val(res[0]);
+		$('#region').val(res[1]);
+		$('#subregion').val(res[2]);
+		$('#appellation').val(res[3]);
+	}
+	return false;
+}
+
+function closeModalDialog() {
+	currentRecord = "";
+	var theDialog = $("#dialog").dialog(opt);
+	theDialog.dialog("close");
+	return true;
+}
+
+function submitClicked() {
+	var country = $('#country').val();
+	var region = $('#region').val();
+	var subregion = $('#subregion').val();
+	var appellation = $('#appellation').val();
+	var newRecord = country + "#" + region + "#" + subregion + "#" + appellation;
+
+	if (country == null || country == "") {
+		alert("Please enter country");
+		return false;
+    } else if(currentRecord.length > 0) { // Update data using Edit button
+		editRecordSubmit(currentRecord, newRecord);
+	} else { // Add new record using Add Record
+		addRecordSubmit(newRecord);
+	}
+}
+
+function editRecord(record) {
+	currentRecord = record;
+	display();
+	return;
+}
+
+function editRecordSubmit(currentRecord, newRecord) {
+	var allRecord = currentRecord + "@~@" + newRecord;
+	
+	var r = confirm("Are you sure you want to save the record?");
+	if (r == true) {
+		var request = $.ajax({
+			url: "../../../../../api/admin_api.php?function=geography&action=editGeographyMasterRecord",
+		   	type: "POST",
+		   	data: {record : allRecord},
+		   	dataType: "html"
+		});
+
+		request.done(function(msg) {
+			closeModalDialog();
+			if (msg.length > 0) {
+				$("#geography-list").html(msg);
+			}
+		});
+
+		request.fail(function(jqXHR, textStatus) {
+			alert( "Request failed: " + textStatus );
+		});    
+	}
+}
+
+ function deleteRecord(record) {
 	 var r = confirm("Are you sure you want to delete the record?");
 	 if (r == true) {
 		 var request = $.ajax({
-		   url: "../../../../../api/admin_api.php?function=city&action=deleteCityMasterRecord",
+		   url: "../../../../../api/admin_api.php?function=geography&action=deleteGeographyMasterRecord",
 		   type: "POST",
-		   data: {cityName : city},
+		   data: {record : record},
 		   dataType: "html"
 		 });
 
 		 request.done(function(msg) {
 			if (msg.length > 0) {
-				$("#city-list").html(msg);
+				$("#geography-list").html(msg);
 			}
 		 });
-
 		 request.fail(function(jqXHR, textStatus) {
-		   alert( "Request failed: " + textStatus );
+		 	alert("Request failed: " + textStatus);
 		 });    
 	 }
  }
 
  function addRecord() {
-	 var city = $('#text_input_new_entry').val();
-	 if (city.length > 0) {
-		$('#text_input_new_entry').val(""); 
-	 	var request = $.ajax({
-		   url: "../../../../../api/admin_api.php?function=city&action=addCityMasterRecord",
+	 display();
+ }
+
+ function addRecordSubmit(newRecord) {
+	 var r = confirm("Are you sure you want to add the record?");
+	 if (r == true) {
+		 var request = $.ajax({
+		   url: "../../../../../api/admin_api.php?function=geography&action=addGeographyMasterRecord",
 		   type: "POST",
-		   data: {cityName : city},
+		   data: {record : newRecord},
 		   dataType: "html"
 		 });
 
 		 request.done(function(msg) {
+			closeModalDialog();
 			if (msg.length > 0) {
-				$("#city-list").html(msg);
+				$("#geography-list").html(msg);
 			}
 		 });
 
 		 request.fail(function(jqXHR, textStatus) {
-		   alert( "Request failed: " + textStatus );
-		 });
-	 } else {
-		alert("Please input city!");
+		 	alert( "Request failed: " + textStatus );
+		 });    
 	 }
  }
-
+ 
  function uploadResponse(responseStatus) {
 	 if (responseStatus.length > 0) {
-		$("#city-list").html(responseStatus);
+		$("#geography-list").html(responseStatus);
 		$("#fileToUpload").val('');
 	 }
  }
@@ -112,7 +207,7 @@ form{
  function submitForm() {
 	 if (validateInput(document.getElementById("fileToUpload")) == true) {
 	     var formData = new FormData(document.getElementById("fileinfo"));
-	     formData.append("pagename", "city");
+	     formData.append("pagename", "geography");
 	     upload(uploadResponse, formData);
 	     return false;
 	 }
@@ -120,41 +215,54 @@ form{
 </script>
  
 <body>
+    <div id="dialog" title="Record" style="display:none">
+  		<div class="form-group">
+    		<label>Country:</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    		<input type="text" class="form-control" id="country">
+  		</div>
+  		<div class="form-group">
+   			<label>Region:</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    		<input type="text" class="form-control" id="region">
+  		</div>
+  		<div class="form-group">
+    		<label>Sub Region:</label>
+    		<input type="text" class="form-control" id="subregion">
+  		</div>
+  		<div class="form-group">
+   			<label>Appellation:</label>
+    		<input type="text" class="form-control" id="appellation">
+  		</div>
+  		<br>
+  		<button class="customButton" id="dialogSaveButton" onClick="submitClicked();">Submit</button>
+  		<button class="customButton" id="dialogCancelButton" onClick="closeModalDialog();">Cancel</button>   
+    </div>
+
 	<table id="main">
 		<tr>
-			<th colspan="2"><p>City</p></th>
+			<th colspan="5"><p>Geography</p></th>
+		</tr>
+		<tr style="margin-left: 10px; border: 1px solid #32414e;">
+			<td colspan="2" width="50%" style="padding: 10px 10px 10px 10px;">
+				<button id="btn_add" class="customButton" onClick="addRecord()">Add New Record</button>
+			</td>
+			<td colspan="3" width="%" style="padding: 10px 10px 10px 10px;">											
+				Upload CSV File <br/>
+				<form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
+        		<input type="file" name="file" id="fileToUpload" required onChange="validateInput(this)" />
+       			<input type="submit" value="Upload" />
+   				</form>
+			</td>
 		</tr>
 		<tr>
-			<td width="60%" id="city-list">
-				<!-- Displays the existing data -->
-				<?php echo $cityListStr;?>
-			</td>
-			<td width="%" valign="top">
-				<!-- Add new data and also shows option to upload csv -->
-				<table>
-					<tr style="margin-left: 10px;">
-						<td width="100%" style="padding: 10px 10px 10px 10px;">
-							Enter City name:<br/>
-							<input type="text" id="text_input_new_entry"/>
-							<button id="btn_add" onClick="addRecord()">Add</button>
-						</td>
-					</tr>
-					<tr>
-					<th style="height: 30px;">Or</th>
-					</tr>
-					<tr style="margin-left: 10px;">
-						<td width="100%" style="padding: 10px 10px 10px 10px;">											
-							Upload CSV File <br/>
-							<form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
-        						 <input type="file" name="file" id="fileToUpload" required onChange="validateInput(this)" />
-       							 <input type="submit" value="Upload" />
-   							</form>
-							<br/>							
-						</td>
-					</tr>
-				</table>
-			</td>
+				<th>Country</th>
+				<th>Region</th>
+				<th>Sub Region</th>
+				<th>Appellation</th>
+				<th>Action</th>
 		</tr>
-	</table>
+		<tbody id="geography-list">
+			<?php echo $geographyListStr;?>
+		</tbody>
+	</table>	
 </body>
 </html>
