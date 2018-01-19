@@ -6,8 +6,15 @@ include_once 'more/contactus/contactus_server.php';
 include_once 'more/critics/critics_server.php';
 include_once 'more/criticsscore/criticsscore_server.php';
 include_once 'more/currency/currency_server.php';
-include_once 'more/itemsize/itemsize_server.php';
 include_once 'more/geography/geography_server.php';
+include_once 'more/itemsize/itemsize_server.php';
+include_once 'more/legalinformation/legalinformation_server.php';
+include_once 'more/marketingtext/marketingtext_server.php';
+include_once 'more/status/status_server.php';
+include_once 'more/tax/tax_server.php';
+include_once 'more/varietal/varietal_server.php';
+include_once 'more/vintage/vintage_server.php';
+include_once 'more/winetype/winetype_server.php';
 
 
 class AdminApi {
